@@ -1,0 +1,104 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>A Basic HTML5 Template</title>
+    <meta name="description" content="A simple service that can parse any article into Reading Mode.">
+    <meta name="author" content="kirilov.ml">
+
+    <meta property="og:title" content="Page Parser">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
+    <meta property="og:description" content="A simple service that can parse any article into Reading Mode.">
+    <meta property="og:image" content="image.png">
+
+    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+</head>
+
+<body>
+    <div id="statusMessage">
+        Loading...
+    </div>
+
+    <div class="content">
+        <h1 id="title"></h1>
+        <p><span id="datee"></span></p>
+        <p class="content">Published <span id="date"></span> <span class="domain">on <a id="source" href="#"><span
+                        id="domain"></span></a></span></p>
+        <blockquote id="excerpt"></blockquote>
+        <img id="image" src="">
+        <article id="content"></article>
+    </div>
+
+    <div>
+        <form>
+            <input type="url" name="url" id="example">
+            <button onclick="location.href='?url=' + document.getElementById('example').value" type="button">Go</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementsByClassName('content')[0].style.display = 'none';
+        //document.getElementsByClassName('content')[0].style.visibility = 'hidden';
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        const url = (function () {
+            //console.log('param url is: ' + urlParams.get('url') + 'end')
+            if (urlParams.has('url') && urlParams.get('url') !== '') return 'https://mercury-express.ml4den.repl.co/parse?url=' + urlParams.get('url');
+            //else if (falsy) return 2;
+            //return 'http://httpstat.us/500';
+            //return 'https://mercury-express.ml4den.repl.co/parse?url=https://foreignpolicy.com/2022/04/18/ukraine-russia-war-oil-energy-climate-gas-prices';
+            return null;
+        })();
+
+        //console.log(url);
+
+        function handleErrors(response) {
+            if (!response.ok) {
+                document.getElementById("statusMessage").innerHTML = response.statusText;
+                throw Error(response.statusText);
+            }
+            return response;
+        }
+
+        //console.log('url is: ' + url);
+        if (url !== null) {
+            fetch(url)
+                .then(handleErrors)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (jsonResponse) {
+                    // do something with jsonResponse
+                    document.getElementById("statusMessage").style.display = 'none';
+                    console.log(jsonResponse);
+                    if (!jsonResponse.error) { document.getElementsByClassName('content')[0].style.display = 'block'; }
+                    if (jsonResponse.title) { document.getElementById("title").innerHTML = jsonResponse.title; }
+                    if (jsonResponse.date_published) { document.getElementById("date").innerHTML = new Date(jsonResponse.date_published).toDateString(); }
+                    if (jsonResponse.url) { document.getElementById("source").href = jsonResponse.url; }
+                    if (jsonResponse.domain) { document.getElementById("domain").innerHTML = jsonResponse.domain; }
+                    if (jsonResponse.excerpt) { document.getElementById("excerpt").innerHTML = jsonResponse.excerpt; }
+                    if (jsonResponse.lead_image_url) { document.getElementById("image").src = jsonResponse.lead_image_url; }
+                    if (jsonResponse.content) { document.getElementById("content").innerHTML = jsonResponse.content; }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } else {
+            document.getElementById("statusMessage").innerHTML = 'Please enter a URL';
+        }
+    </script>
+
+</body>
+
+</html>
