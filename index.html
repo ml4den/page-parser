@@ -62,7 +62,7 @@
         const urlParams = new URLSearchParams(queryString);
 
         const url = (function () {
-            if (urlParams.has('url') && urlParams.get('url') !== '') return 'https://mercury-express.ml4den.repl.co/parse?url=' + urlParams.get('url');
+            if (urlParams.has('url') && urlParams.get('url') !== '') return '/api?url=' + urlParams.get('url');
             return null;
         })();
 
