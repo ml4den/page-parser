@@ -34,11 +34,11 @@
 </head>
 
 <body>
-    <div class="container" id="statusMessage">
-        Loading...
+    <div class="container text-center pt-3" id="statusMessage">
+        <div class="spinner-border" role="status"></div>
     </div>
 
-    <div class="content container">
+    <div class="content container border-bottom">
         <h1 id="title"></h1>
         <p><span id="datee"></span></p>
         <p class="content">Published <span id="date"></span> <span class="domain">on <a id="source" href="#"><span
@@ -49,10 +49,22 @@
     </div>
 
     <div class="container">
-        <form>
-            <input type="url" name="url" id="example">
-            <button onclick="location.href='?url=' + document.getElementById('example').value" type="button">Go</button>
-        </form>
+        <section class="py-4 py-xl-5 container">
+            <div class="row mb-2">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2 class="display-6 fw-bold">Page Parser</h2>
+                    <p class="text-muted">Paste a link to an article that you would like to convert to reading mode
+                        below or drag this bookmarklet to your browser favourites: <a href="javascript:(function()%7Bwindow.open('https%3A%2F%2Fread.kirilov.ml%3Furl%3D'%20%2B%20document.URL%2C%20'_blank')%3B%7D)()%3B">Read</a></p>
+                </div>
+            </div>
+            <form class="d-flex justify-content-center flex-wrap">
+                <div class="mb-3"><input class="form-control" type="url" name="url" placeholder="URL" id="url" />
+                </div>
+                <div class="mb-3"><button class="btn btn-primary ms-2"
+                        onclick="location.href='?url=' + document.getElementById('url').value"
+                        type="button">Read</button></div>
+            </form>
+        </section>
     </div>
 
     <script>
@@ -83,7 +95,6 @@
                 .then(function (jsonResponse) {
                     // do something with jsonResponse
                     document.getElementById("statusMessage").style.display = 'none';
-                    console.log(jsonResponse);
                     if (!jsonResponse.error) { document.getElementsByClassName('content')[0].style.display = 'block'; }
                     if (jsonResponse.title) { document.getElementById("title").innerHTML = jsonResponse.title; }
                     if (jsonResponse.date_published) { document.getElementById("date").innerHTML = new Date(jsonResponse.date_published).toDateString(); }
@@ -95,9 +106,10 @@
                 })
                 .catch(function (error) {
                     console.log(error);
+                    document.getElementById("statusMessage").innerHTML = error;
                 });
         } else {
-            document.getElementById("statusMessage").innerHTML = 'Please enter a URL';
+            document.getElementById("statusMessage").style.display = 'none';
         }
     </script>
 
