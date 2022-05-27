@@ -113,6 +113,8 @@
       const url = (function () {
         if (urlParams.has("url") && urlParams.get("url") !== "")
           return "/api?url=" + urlParams.get("url");
+        else if (urlParams.has("text") && urlParams.get("text") !== "")
+          return "/api?url=" + urlParams.get("url");
         return null;
       })();
 

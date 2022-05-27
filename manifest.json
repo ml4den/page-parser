@@ -9,10 +9,6 @@
             "purpose": "any"
         }
     ],
-    "start_url": "/",
-    "background_color": "#ffffff",
-    "display": "standalone",
-    "theme_color": "#ffffff",
     "share_target": {
         "action": "/",
         "params": {
@@ -20,5 +16,9 @@
             "text": "text",
             "url": "url"
         }
-    }
+    },
+    "start_url": "/",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "theme_color": "#ffffff"
 }
