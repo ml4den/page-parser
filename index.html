@@ -22,7 +22,7 @@
     />
     <meta property="og:image" content="" />
 
-    <link rel="icon" href="favicon.svg" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml />
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="favicon-192px.png" />
 
@@ -54,7 +54,23 @@
     </div>
 
     <div class="content container border-bottom">
-      <h1 id="title"></h1>
+      <h1>
+        <span id="title"></span>
+        <a class="share-button" style="cursor: pointer;">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-share"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"
+            ></path>
+          </svg>
+        </a>
+      </h1>
       <p><span id="datee"></span></p>
       <p class="content">
         Published <span id="date"></span>
@@ -103,9 +119,7 @@
             </button>
           </div>
           <div class="mb-3">
-            <button class="btn btn-info ms-2 install">
-              Install
-            </button>
+            <button class="btn btn-info ms-2 install">Install</button>
           </div>
         </form>
       </section>
@@ -118,7 +132,16 @@
       const urlParams = new URLSearchParams(queryString);
 
       const url = (function () {
-        if (urlParams.has("url") && urlParams.get("url") !== "")
+        if (
+          urlParams.has("url") &&
+          urlParams.get("url") !== "" &&
+          location.protocol === "file:"
+        )
+          return (
+            "https://mercury-express.ml4den.repl.co/parse?url=" +
+            urlParams.get("url")
+          );
+        else if (urlParams.has("url") && urlParams.get("url") !== "")
           return "/api?url=" + urlParams.get("url");
         else if (urlParams.has("text") && urlParams.get("text") !== "")
           return "/api?url=" + urlParams.get("text");
@@ -173,6 +196,24 @@
               document.getElementById("content").innerHTML =
                 jsonResponse.content;
             }
+            document
+              .querySelector(".share-button")
+              .addEventListener("click", (event) => {
+                if (navigator.share) {
+                  navigator
+                    .share({
+                      //title: jsonResponse.title,
+                      url: window.location.href,
+                      text: jsonResponse.title
+                    })
+                    .then(() => {
+                      console.log("Thanks for sharing!");
+                    })
+                    .catch(console.error);
+                } else {
+                  // fallback
+                }
+              });
           })
           .catch(function (error) {
             console.log(error);
