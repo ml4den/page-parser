@@ -203,7 +203,7 @@
                   navigator
                     .share({
                       title: jsonResponse.title,
-                      url: jsonResponse.url,
+                      url: window.location.href,
                       text: jsonResponse.excerpt
                     })
                     .then(() => {
