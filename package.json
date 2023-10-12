@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/ml4den/page-parser#readme",
   "dependencies": {
-    "@postlight/mercury-parser": "^2.2.1"
+    "@postlight/parser": "^2.2.3"
   }
 }

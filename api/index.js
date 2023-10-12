@@ -1,8 +1,8 @@
-const Mercury = require('@postlight/mercury-parser');
+const Parser = require('@postlight/parser');
 
 export default async function handler(request, response) {
   if (request.query.url) {
-    const result = await Mercury.parse(request.query.url);
+    const result = await Parser.parse(request.query.url);
     response.status(200).json(result);
   } else {
     response.status(400).json({
