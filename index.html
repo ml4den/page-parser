@@ -65,6 +65,14 @@
     .theme-toggle:active {
       opacity: 1 !important;
     }
+
+    /* Force outline-only state when this class is applied */
+    .theme-toggle.reset-state,
+    .theme-toggle.reset-state:focus,
+    .theme-toggle.reset-state:active {
+      background-color: transparent !important;
+      color: var(--bs-secondary) !important;
+    }
   </style>
 </head>
 
@@ -314,9 +322,15 @@
         const currentTheme = html.getAttribute('data-bs-theme');
         setTheme(currentTheme === 'dark' ? 'light' : 'dark');
 
-        // Remove focus state after 3 seconds (fixes mobile tap staying filled)
+        // Reset button state after 3 seconds (fixes mobile tap staying filled)
+        toggle.classList.remove('reset-state');
         setTimeout(() => {
           toggle.blur();
+          toggle.classList.add('reset-state');
+          // Remove the class after a brief moment so hover still works on desktop
+          setTimeout(() => {
+            toggle.classList.remove('reset-state');
+          }, 100);
         }, 3000);
       });
     })();
