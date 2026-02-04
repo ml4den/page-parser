@@ -66,12 +66,21 @@
       opacity: 1 !important;
     }
 
-    /* Force outline-only state when this class is applied */
-    .theme-toggle.reset-state,
-    .theme-toggle.reset-state:focus,
-    .theme-toggle.reset-state:active {
+    /* Disable filled state for focus/active - only allow hover to show fill */
+    .theme-toggle:focus,
+    .theme-toggle:active,
+    .theme-toggle:focus:active,
+    .theme-toggle:focus-visible {
       background-color: transparent !important;
-      color: var(--bs-secondary) !important;
+      color: var(--bs-btn-color) !important;
+    }
+
+    /* Only desktop hover shows the filled state */
+    @media (hover: hover) {
+      .theme-toggle:hover {
+        background-color: var(--bs-btn-hover-bg) !important;
+        color: var(--bs-btn-hover-color) !important;
+      }
     }
   </style>
 </head>
@@ -321,17 +330,6 @@
       toggle.addEventListener('click', () => {
         const currentTheme = html.getAttribute('data-bs-theme');
         setTheme(currentTheme === 'dark' ? 'light' : 'dark');
-
-        // Reset button state after 3 seconds (fixes mobile tap staying filled)
-        toggle.classList.remove('reset-state');
-        setTimeout(() => {
-          toggle.blur();
-          toggle.classList.add('reset-state');
-          // Remove the class after a brief moment so hover still works on desktop
-          setTimeout(() => {
-            toggle.classList.remove('reset-state');
-          }, 100);
-        }, 3000);
       });
     })();
   </script>
