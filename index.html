@@ -289,12 +289,13 @@
       function setTheme(theme) {
         html.setAttribute('data-bs-theme', theme);
         localStorage.setItem('theme', theme);
+        // Show moon in light mode (to switch to dark), sun in dark mode (to switch to light)
         if (theme === 'dark') {
-          sunIcon.style.display = 'none';
-          moonIcon.style.display = 'block';
-        } else {
           sunIcon.style.display = 'block';
           moonIcon.style.display = 'none';
+        } else {
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
         }
       }
 
@@ -304,11 +305,19 @@
         setTheme(savedTheme);
       } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         setTheme('dark');
+      } else {
+        // Ensure correct icon on initial load for light mode
+        setTheme('light');
       }
 
       toggle.addEventListener('click', () => {
         const currentTheme = html.getAttribute('data-bs-theme');
         setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+
+        // Remove focus state after 3 seconds (fixes mobile tap staying filled)
+        setTimeout(() => {
+          toggle.blur();
+        }, 3000);
       });
     })();
   </script>
